@@ -9,6 +9,8 @@
 
 > "Hyperion no es solo código. Es la respuesta a un desafío que me cautivó por completo. Es la herramienta que desearía haber tenido cuando empecé."
 
+(esta es aun una version beta no todas las partes del bot estan funcionando bien todavia, pero entre mas dias pasan mas me doy cuenta de que nunca sera tan perfecto como sueño asi que mejor decidi mostrar lo que esta avanzado, en los proximos dias arreglare los errores que quedan e implementare todas las funciones gracias por leer espero poder estar a la altura)
+
 ## 🚨 ADVERTENCIA CRÍTICA - LEE ESTO PRIMERO
 
 <table>
@@ -31,7 +33,7 @@
 
 ## 💫 La Historia Detrás de Hyperion
 
-Hola, soy el creador de Hyperion. Permíteme contarte una historia.
+Hola, soy el creador de Hyperion. Giovanni pero me Gusta mas Ganador Permíteme contarte una historia.
 
 Siempre soñé con crear un bot de trading que operara de forma autónoma, una máquina inteligente capaz de navegar los turbulentos mares del mercado. Cuando empecé, mi ingenuidad me hizo pensar que sería una tarea fácil. Creí que en un par de fines de semana tendría algo funcionando.
 
@@ -47,20 +49,13 @@ Este proyecto es el resultado de incontables horas de trabajo, de prueba y error
 
 ## 🚀 Quick Start
 
-### ⚡ Ejemplo Súper Rápido (2 minutos)
-```bash
-# 1. Ejemplo mínimo sin configuración compleja
-pip install numpy pandas matplotlib
-python example_minimal.py
-```
-
 ### 🎯 Inicio Completo (5 minutos)
 ```bash
 # 1. Inicia el sistema profesional (RECOMENDADO)
 pip install -r requirements.txt
 python main.py
 
-# 2. O accede directamente a la interfaz profesional
+# 2. accede directamente a la interfaz profesional
 python main_professional.py
 
 # 3. Valida la estructura modular
