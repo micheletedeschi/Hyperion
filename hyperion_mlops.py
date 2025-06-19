@@ -39,6 +39,64 @@ except ImportError:
     Console = None
     RICH_AVAILABLE = False
 
+def make_json_serializable(obj):
+    """
+    Convierte objetos no serializables a representaciones serializables para JSON.
+    """
+    # Manejar valores None, NaN e Inf
+    if obj is None:
+        return None
+    elif isinstance(obj, (int, float)):
+        if np.isnan(obj) or np.isinf(obj):
+            return None
+        return obj
+    elif hasattr(obj, 'tolist'):  # numpy arrays
+        return obj.tolist()
+    elif hasattr(obj, '__dict__') and hasattr(obj, '__class__'):
+        # Objetos complejos como modelos de scikit-learn
+        return {
+            'type': obj.__class__.__name__,
+            'module': obj.__class__.__module__,
+            'repr': str(obj)
+        }
+    elif isinstance(obj, (np.integer, np.floating)):
+        val = obj.item()
+        if np.isnan(val) or np.isinf(val):
+            return None
+        return val
+    elif isinstance(obj, dict):
+        return {k: make_json_serializable(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [make_json_serializable(item) for item in obj]
+    else:
+        try:
+            json.dumps(obj)
+            return obj
+        except TypeError:
+            return str(obj)
+
+def clean_metrics_for_json(metrics: Dict) -> Dict:
+    """
+    Limpia un diccionario de métricas removiendo objetos no serializables
+    y convirtiendo otros a formatos serializables.
+    """
+    cleaned = {}
+    exclude_keys = {'model_object', 'model', 'estimator', 'trained_model'}
+    
+    for key, value in metrics.items():
+        if key in exclude_keys:
+            continue
+        
+        try:
+            # Intentar serializar directamente
+            json.dumps(value)
+            cleaned[key] = value
+        except TypeError:
+            # Si no se puede serializar, usar la función helper
+            cleaned[key] = make_json_serializable(value)
+    
+    return cleaned
+
 class MLOpsManager:
     """Gestor completo de MLOps para Hyperion3"""
     
@@ -151,7 +209,7 @@ class MLOpsManager:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             experiment_id, name, model_type, category, 'running', 
-            datetime.now(), json.dumps(parameters or {}), self.session_id
+            datetime.now(), json.dumps(clean_metrics_for_json(parameters or {})), self.session_id
         ))
         
         conn.commit()
@@ -253,7 +311,7 @@ class MLOpsManager:
             'completed', end_time, duration,
             final_metrics.get('r2_score'), final_metrics.get('mse'),
             final_metrics.get('mae'), final_metrics.get('rmse'),
-            json.dumps(final_metrics), experiment_id
+            json.dumps(clean_metrics_for_json(final_metrics)), experiment_id
         ))
         
         conn.commit()
@@ -415,7 +473,7 @@ class MLOpsManager:
             "model_type": exp_data[2] if exp_data else "Unknown",
             "category": exp_data[3] if exp_data else "Unknown",
             "duration_seconds": exp_data[6] if exp_data else 0,
-            "final_metrics": metrics,
+            "final_metrics": clean_metrics_for_json(metrics),
             "model_path": model_path,
             "artifacts_path": artifacts_path,
             "epoch_count": len(epoch_data),
@@ -439,6 +497,15 @@ class MLOpsManager:
                 duration = float(exp_data[6])
             except (ValueError, TypeError):
                 duration = 0.0
+        
+        # Formatear métricas de manera segura
+        r2_score = metrics.get('r2_score', 0)
+        mse = metrics.get('mse', 0)
+        mae = metrics.get('mae', 0)
+        
+        r2_str = f"{r2_score:.4f}" if isinstance(r2_score, (int, float)) and not (np.isnan(r2_score) or np.isinf(r2_score)) else "N/A"
+        mse_str = f"{mse:.4f}" if isinstance(mse, (int, float)) and not (np.isnan(mse) or np.isinf(mse)) else "N/A"
+        mae_str = f"{mae:.4f}" if isinstance(mae, (int, float)) and not (np.isnan(mae) or np.isinf(mae)) else "N/A"
         
         html = f"""
         <!DOCTYPE html>
@@ -469,15 +536,15 @@ class MLOpsManager:
             <div class="section">
                 <h2>📊 Métricas Finales</h2>
                 <div class="metric">
-                    <div class="metric-value">{metrics.get('r2_score', 0):.4f}</div>
+                    <div class="metric-value">{r2_str}</div>
                     <div class="metric-label">R² Score</div>
                 </div>
                 <div class="metric">
-                    <div class="metric-value">{metrics.get('mse', 0):.4f}</div>
+                    <div class="metric-value">{mse_str}</div>
                     <div class="metric-label">MSE</div>
                 </div>
                 <div class="metric">
-                    <div class="metric-value">{metrics.get('mae', 0):.4f}</div>
+                    <div class="metric-value">{mae_str}</div>
                     <div class="metric-label">MAE</div>
                 </div>
                 <div class="metric">
@@ -601,8 +668,12 @@ class MLOpsManager:
         """Mostrar resumen final del experimento"""
         if not self.console or not RICH_AVAILABLE:
             print(f"\n🎯 Experimento {experiment_id} completado")
-            print(f"R² Score: {metrics.get('r2_score', 'N/A'):.4f}")
-            print(f"MSE: {metrics.get('mse', 'N/A'):.4f}")
+            r2 = metrics.get('r2_score')
+            mse = metrics.get('mse')
+            r2_str = f"{r2:.4f}" if isinstance(r2, (int, float)) and not (np.isnan(r2) or np.isinf(r2)) else 'N/A'
+            mse_str = f"{mse:.4f}" if isinstance(mse, (int, float)) and not (np.isnan(mse) or np.isinf(mse)) else 'N/A'
+            print(f"R² Score: {r2_str}")
+            print(f"MSE: {mse_str}")
             print(f"Reporte: {report_path}")
             return
         
@@ -636,9 +707,15 @@ class MLOpsManager:
         r2_score = metrics.get('r2_score', 0)
         r2_status = "🟢 Excelente" if r2_score > 0.8 else "🟡 Bueno" if r2_score > 0.6 else "🔴 Necesita mejora"
         
-        metrics_table.add_row("R² Score", f"{r2_score:.4f}", r2_status)
-        metrics_table.add_row("MSE", f"{metrics.get('mse', 0):.4f}", "📊 Loss")
-        metrics_table.add_row("MAE", f"{metrics.get('mae', 0):.4f}", "📊 Error Abs")
+        r2_str = f"{r2_score:.4f}" if isinstance(r2_score, (int, float)) and not (np.isnan(r2_score) or np.isinf(r2_score)) else "N/A"
+        mse_val = metrics.get('mse', 0)
+        mse_str = f"{mse_val:.4f}" if isinstance(mse_val, (int, float)) and not (np.isnan(mse_val) or np.isinf(mse_val)) else "N/A"
+        mae_val = metrics.get('mae', 0)
+        mae_str = f"{mae_val:.4f}" if isinstance(mae_val, (int, float)) and not (np.isnan(mae_val) or np.isinf(mae_val)) else "N/A"
+        
+        metrics_table.add_row("R² Score", r2_str, r2_status)
+        metrics_table.add_row("MSE", mse_str, "📊 Loss")
+        metrics_table.add_row("MAE", mae_str, "📊 Error Abs")
         
         # Comparación
         if comparison:
@@ -653,9 +730,11 @@ class MLOpsManager:
             
             improvement = comparison.get('improvement', 0)
             if improvement > 0:
-                comp_table.add_row("📈 Mejora R²", f"[green]+{improvement:.4f}[/green]")
+                imp_str = f"{improvement:.4f}" if isinstance(improvement, (int, float)) and not (np.isnan(improvement) or np.isinf(improvement)) else "N/A"
+                comp_table.add_row("📈 Mejora R²", f"[green]+{imp_str}[/green]")
             else:
-                comp_table.add_row("📉 Diferencia R²", f"[red]{improvement:.4f}[/red]")
+                imp_str = f"{improvement:.4f}" if isinstance(improvement, (int, float)) and not (np.isnan(improvement) or np.isinf(improvement)) else "N/A"
+                comp_table.add_row("📉 Diferencia R²", f"[red]{imp_str}[/red]")
         else:
             comp_table = Panel("[yellow]Primer experimento de este tipo[/yellow]", title="📈 Comparación")
         
@@ -679,7 +758,7 @@ class MLOpsManager:
             "timestamp": datetime.now().isoformat(),
             "session_id": self.session_id,
             "message": message,
-            "data": data or {}
+            "data": clean_metrics_for_json(data or {})
         }
         
         log_file = self.logs_dir / f"{datetime.now().strftime('%Y%m%d')}_experiments.log"
@@ -735,7 +814,9 @@ class SimpleProgressMonitor:
     def update(self, epoch: int, metrics: Dict):
         self.current_epoch = epoch
         progress = (epoch / self.total_epochs) * 100
-        print(f"\rÉpoca {epoch}/{self.total_epochs} ({progress:.1f}%) - Loss: {metrics.get('loss', 'N/A'):.4f}", end='')
+        loss = metrics.get('loss')
+        loss_str = f"{loss:.4f}" if isinstance(loss, (int, float)) and not (np.isnan(loss) or np.isinf(loss)) else 'N/A'
+        print(f"\rÉpoca {epoch}/{self.total_epochs} ({progress:.1f}%) - Loss: {loss_str}", end='')
     
     def finish(self):
         print("\n✅ Entrenamiento completado")
@@ -785,10 +866,14 @@ class RichProgressMonitor:
     def update(self, epoch: int, metrics: Dict):
         if self.progress and self.task_id is not None:
             # Actualizar progress bar
+            loss = metrics.get('loss')
+            r2 = metrics.get('r2_score')
+            loss_str = f"{loss:.4f}" if isinstance(loss, (int, float)) and not (np.isnan(loss) or np.isinf(loss)) else 'N/A'
+            r2_str = f"{r2:.4f}" if isinstance(r2, (int, float)) and not (np.isnan(r2) or np.isinf(r2)) else 'N/A'
             self.progress.update(
                 self.task_id, 
                 completed=epoch, 
-                description=f"Época {epoch}/{self.total_epochs} - Loss: {metrics.get('loss', 'N/A'):.4f} - R²: {metrics.get('r2_score', 'N/A'):.4f}"
+                description=f"Época {epoch}/{self.total_epochs} - Loss: {loss_str} - R²: {r2_str}"
             )
             
             # Registrar métricas

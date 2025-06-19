@@ -488,17 +488,16 @@ def create_ensemble_models(device="cpu", n_jobs=8):
             verbose=False
         )
     
-    # 🤖 MODELOS PYTORCH (si está disponible y device != cpu)
+    # 🤖 MODELOS PYTORCH - NO incluirlos en ensembles sklearn
+    # Estos modelos requieren manejo especial y no se pueden usar directamente
+    # en ensembles de sklearn ya que no implementan la interfaz sklearn
     if PYTORCH_AVAILABLE and device != "cpu":
-        try:
-            # Estos se crearán dinámicamente cuando se necesiten
-            # porque requieren conocer input_size
-            models['mlp_pytorch'] = 'pytorch_mlp'
-            models['lstm'] = 'pytorch_lstm'
-            models['transformer'] = 'pytorch_transformer'
-            models['cnn_1d'] = 'pytorch_cnn'
-        except Exception as e:
-            print(f"⚠️ Error configurando modelos PyTorch: {e}")
+        # Los modelos PyTorch se entrenan por separado
+        # models['mlp_pytorch'] = 'pytorch_mlp'  # REMOVIDO
+        # models['lstm'] = 'pytorch_lstm'  # REMOVIDO
+        # models['transformer'] = 'pytorch_transformer'  # REMOVIDO
+        # models['cnn_1d'] = 'pytorch_cnn'  # REMOVIDO
+        pass  # No agregar modelos PyTorch a ensembles sklearn
     
     # 🎯 ENSEMBLE VOTING
     if len(models) >= 3:

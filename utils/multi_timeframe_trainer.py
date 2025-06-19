@@ -817,11 +817,17 @@ class MultiTimeframeTrainer:
                 content += f"[cyan]Timeframes:[/cyan] {', '.join(result['timeframes'])}\n"
                 content += f"[cyan]Features:[/cyan] {result['features_count']}\n"
                 content += f"[cyan]Mejor modelo:[/cyan] {result['best_model']}\n"
-                content += f"[cyan]Best R² Score:[/cyan] {result['best_score']:.4f}\n\n"
+                best_score = result['best_score']
+                score_str = f"{best_score:.4f}" if isinstance(best_score, (int, float)) and not (np.isnan(best_score) or np.isinf(best_score)) else "N/A"
+                content += f"[cyan]Best R² Score:[/cyan] {score_str}\n\n"
                 
                 content += "[yellow]Resultados por modelo:[/yellow]\n"
                 for model, metrics in result['results'].items():
-                    content += f"• {model}: R²={metrics['r2_score']:.4f}, MSE={metrics['mse']:.6f}\n"
+                    r2 = metrics['r2_score']
+                    mse = metrics['mse']
+                    r2_str = f"{r2:.4f}" if isinstance(r2, (int, float)) and not (np.isnan(r2) or np.isinf(r2)) else "N/A"
+                    mse_str = f"{mse:.6f}" if isinstance(mse, (int, float)) and not (np.isnan(mse) or np.isinf(mse)) else "N/A"
+                    content += f"• {model}: R²={r2_str}, MSE={mse_str}\n"
                 
                 self.console.print(Panel(content, title="🕐 Multi-Timeframe Results", border_style="magenta"))
             else:

@@ -202,7 +202,9 @@ class HyperparameterOptimizer:
                         model.fit(X_train, y_train)
                         y_pred = model.predict(X_val)
                         return r2_score(y_val, y_pred)
-                    except Exception:
+                    except Exception as e:
+                        if self.console:
+                            self.console.print(f"❌ Error en {model_name}: {str(e)}")
                         return -999  # Penalizar parámetros inválidos
                 
                 study = optuna.create_study(
@@ -246,12 +248,17 @@ class HyperparameterOptimizer:
             params.update(self.gpu_config.get('xgboost_params', {}))
             
             try:
+                # Para XGBoost 3.x, usar early_stopping_rounds en el constructor
+                params['early_stopping_rounds'] = 10
                 model = xgb.XGBRegressor(**params)
-                model.fit(X_train, y_train, eval_set=[(X_val, y_val)], 
-                         verbose=False, early_stopping_rounds=10)
+                
+                # En XGBoost 3.x, fit() es más simple
+                model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
                 y_pred = model.predict(X_val)
                 return r2_score(y_val, y_pred)
-            except Exception:
+            except Exception as e:
+                if self.console:
+                    self.console.print(f"❌ Error en XGBoost trial: {str(e)}")
                 return -999
         
         try:
@@ -294,10 +301,12 @@ class HyperparameterOptimizer:
             try:
                 model = lgb.LGBMRegressor(**params)
                 model.fit(X_train, y_train, eval_set=[(X_val, y_val)], 
-                         callbacks=[lgb.early_stopping(10), lgb.log_evaluation(0)])
+                         callbacks=[lgb.early_stopping(10, verbose=False), lgb.log_evaluation(0)])
                 y_pred = model.predict(X_val)
                 return r2_score(y_val, y_pred)
-            except Exception:
+            except Exception as e:
+                if self.console:
+                    self.console.print(f"❌ Error en LightGBM trial: {str(e)}")
                 return -999
         
         try:
@@ -595,10 +604,6 @@ def quick_optimize_hyperparameters(model_type: str, X_train, y_train, X_val, y_v
     elif model_type == 'catboost':
         return optimizer.optimize_catboost(X_train, y_train, X_val, y_val, n_trials)
     elif model_type == 'sklearn':
-        models = {
-            'random_forest': RandomForestRegressor(),
-            'gradient_boosting': GradientBoostingRegressor()
-        } if SKLEARN_AVAILABLE else {}
-        return optimizer.optimize_sklearn_models(X_train, y_train, X_val, y_val, models, n_trials)
+        return optimizer.optimize_sklearn_models(X_train, y_train, X_val, y_val, n_trials)
     else:
         raise ValueError(f"Tipo de modelo no soportado: {model_type}")

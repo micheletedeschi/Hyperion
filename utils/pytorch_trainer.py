@@ -124,7 +124,8 @@ class PytorchTrainer:
                 'device': self.device
             }
             
-            print(f"  ✅ Entrenamiento completado - Test R²: {test_r2:.4f}")
+            test_r2_str = f"{test_r2:.4f}" if isinstance(test_r2, (int, float)) and not (np.isnan(test_r2) or np.isinf(test_r2)) else "N/A"
+            print(f"  ✅ Entrenamiento completado - Test R²: {test_r2_str}")
             return result
             
         except Exception as e:
@@ -219,7 +220,9 @@ def test_pytorch_models():
         results[model_type] = result
         
         if result['success']:
-            print(f"  ✅ {model_type} - R²: {result['test_r2']:.4f}")
+            test_r2 = result['test_r2']
+            test_r2_str = f"{test_r2:.4f}" if isinstance(test_r2, (int, float)) and not (np.isnan(test_r2) or np.isinf(test_r2)) else "N/A"
+            print(f"  ✅ {model_type} - R²: {test_r2_str}")
         else:
             print(f"  ❌ {model_type} - Error: {result['error']}")
     

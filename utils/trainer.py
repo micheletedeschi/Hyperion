@@ -357,7 +357,9 @@ class UltraCompleteEnsembleTrainer:
                 if self.console:
                     self.console.print(f"\n🏆 MEJOR MODELO: {best_result['model_name']}")
                     self.console.print(f"   Win Rate: {best_result['trading_metrics']['win_rate']:.2%}")
-                    self.console.print(f"   R²: {best_result['r2']:.4f}")
+                    r2 = best_result['r2']
+                    r2_str = f"{r2:.4f}" if isinstance(r2, (int, float)) and not (np.isnan(r2) or np.isinf(r2)) else "N/A"
+                    self.console.print(f"   R²: {r2_str}")
             
             # 13. Guardar resultados
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -938,7 +940,8 @@ class UltraCompleteEnsembleTrainer:
                 annual_return = trading_metrics.get('annual_return', 0)
                 num_trades = trading_metrics.get('num_trades', 0)
                 
-                print(f"{model_name:<20} {r2:<8.4f} {win_rate:<10.2%} {annual_return:<15.2%} {num_trades:<8}")
+                r2_str = f"{r2:.4f}" if isinstance(r2, (int, float)) and not (np.isnan(r2) or np.isinf(r2)) else "N/A    "
+                print(f"{model_name:<20} {r2_str:<8} {win_rate:<10.2%} {annual_return:<15.2%} {num_trades:<8}")
 
 # Alias para compatibilidad
 HyperionTrainer = UltraCompleteEnsembleTrainer
