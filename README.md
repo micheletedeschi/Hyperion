@@ -82,54 +82,6 @@ See [docs/INSTALLATION.md](docs/INSTALLATION.md) for detailed instructions and a
 * Unix-like OS (Linux or macOS recommended)
 * Optional: GPU with CUDA for deep learning models
 
-## Quick Start
-
-Run the main application with the default settings:
-
-```bash
-python main.py
-```
-
-You can also start an experiment from a YAML configuration:
-
-```bash
-python scripts/run_experiment.py config/sample_config.yaml --backtest
-```
-
-Press `Ctrl+C` at any time to cancel the interactive CLI.
-
-The framework automatically selects the best available device (CUDA, MPS or CPU) so it can run efficiently on most hardware without manual tweaks.
-
-## Configuration
-
-Configuration files live under `hyperion3/config/`. The main dataclass `HyperionV2Config` exposes settings for data sources, model parameters, trading rules and MLOps options. Edit `config/sample_config.yaml` to customise symbols, lookback windows or enabled models and load it via:
-
-```bash
-python main.py --config config/sample_config.yaml
-```
-
-### Modes
-
-- **Train**
-  ```bash
-  python main.py --mode train --config config/sample_config.yaml
-  ```
-- **Backtest**
-  ```bash
-  python main.py --mode backtest --config config/sample_config.yaml
-  ```
-- **Live trading**
-  ```bash
-  python main.py --mode live --config config/sample_config.yaml
-  ```
-
-## Deployment
-
-Real trading execution is handled by the scripts in `deployment/`. The
-`live_trader.py` module connects to exchanges via CCXT and supports
-both testnet and mainnet trading. Monitoring and risk management helpers
-are also provided in this package.
-
 ## Architecture Overview
 
 The code base is organised into modular packages:
@@ -150,10 +102,6 @@ A detailed Spanish overview is available in [`estructura del proyecto.txt`](estr
 Raw datasets reside in `data/`. Use the provided preprocessing scripts to generate features and augmentations. The `DataConfig` class controls symbols, lookback windows and additional data sources such as sentiment, orderbook or on‑chain metrics. See [`docs/DATA_MANAGEMENT.md`](docs/DATA_MANAGEMENT.md) for a walkthrough.
 
 
-### Automated Data Updates
-
-Run `python scripts/data_scheduler.py` to start a background scheduler that refreshes datasets periodically based on `update_frequency` from your configuration. See [`docs/SCHEDULER.md`](docs/SCHEDULER.md) for details.
-
 ## Documentation
 
 Further guides are available under the `docs/` directory:
@@ -162,27 +110,6 @@ Further guides are available under the `docs/` directory:
 - [`EXPERIMENTS.md`](docs/EXPERIMENTS.md) – running configurable experiments.
 - [`VALIDATORS.md`](docs/VALIDATORS.md) – cross‑validation helpers.
 
-
-## Testing
-
-Run the unit tests with coverage:
-
-```bash
-pytest --cov=hyperion3 tests
-```
-
-The CI pipeline runs a reduced set of dependencies defined in `requirements-test.txt`; tests requiring missing packages will be skipped automatically.
-
-## Deployment with Docker
-
-A `Dockerfile` is provided to build a container image. Create the image and run Hyperion V2 as follows:
-
-```bash
-docker build -t hyperion3 .
-docker run --env-file .env -it hyperion3
-```
-
-The container installs all dependencies and runs `main.py` by default. Mount volumes or customise environment variables as needed.
 
 ## Contributing
 
