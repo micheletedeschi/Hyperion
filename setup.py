@@ -8,7 +8,7 @@ setup(
     version="3.0.0",
     packages=find_packages(),
     install_requires=[
-        # Core Dependencies
+        # Core Dependencies 
         "numpy>=1.24.0",
         "pandas>=2.0.0",
         "scipy>=1.10.0",
@@ -65,15 +65,15 @@ setup(
     ],
     python_requires=">=3.8",
     author="Hyperion Team",
-    author_email="hyperion@trading.ai",
+    author_email="HyperionGanador@proton.me",
     description="Hyperion3 - Framework de Trading Algorítmico Forjado en la Obsesión",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/hyperion-trading/hyperion3",
+    url="https://github.com/Ganador1/Hyperion",
     project_urls={
-        "Bug Reports": "https://github.com/hyperion-trading/hyperion3/issues",
-        "Documentation": "https://github.com/hyperion-trading/hyperion3/docs",
-        "Source": "https://github.com/hyperion-trading/hyperion3",
+        "Bug Reports": "https://github.com/Ganador1/Hyperion/issues",
+        "Documentation": "https://github.com/Ganador1/Hyperion/docs",
+        "Source": "https://github.com/Ganador1/Hyperion",
     },
     classifiers=[
         "Development Status :: 4 - Beta",
