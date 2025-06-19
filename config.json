@@ -1,0 +1,58 @@
+{
+  "api": {
+    "exchange_id": "binance",
+    "is_testnet": true,
+    "rate_limit": true,
+    "timeout": 30
+  },
+  "data": {
+    "symbols": ["BTC/USDT"],
+    "start_date": "2023-01-01",
+    "end_date": "2024-06-01",
+    "timeframe": "1h",
+    "lookback_window": 168,
+    "prediction_horizon": 24,
+    "use_sentiment": false,
+    "use_onchain": false,
+    "augmentation_techniques": ["noise", "scaling"]
+  },
+  "models": {
+    "enabled_models": [
+      "lightgbm",
+      "xgboost",
+      "catboost",
+      "patchtst",
+      "sac"
+    ],
+    "ensemble": {
+      "enabled": true,
+      "method": "voting",
+      "top_n": 3
+    }
+  },
+  "optimization": {
+    "metric": "sharpe_ratio",
+    "time_budget": 3600,
+    "n_splits": 5,
+    "method": "flaml"
+  },
+  "trading": {
+    "initial_balance": 10000.0,
+    "strategy": "long_short",
+    "risk_factor": 0.2,
+    "max_position_size": 0.3
+  },
+  "training": {
+    "epochs": 100,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "early_stopping": true,
+    "patience": 10
+  },
+  "mlops": {
+    "experiment_name": "hyperion_experiment",
+    "tracking_enabled": true,
+    "save_models": true,
+    "save_predictions": true
+  }
+}
