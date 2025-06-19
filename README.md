@@ -259,15 +259,8 @@ Este proyecto se publica bajo los términos de la Licencia Apache 2.0. Ver [`LIC
 
 ## 🌟 Agradecimientos
 
-Gracias a la comunidad open source y a todos los investigadores cuyo trabajo ha hecho posible Hyperion. Especial reconocimiento a:
+Gracias a la comunidad open source y a todos los investigadores cuyo trabajo ha hecho posible Hyperion.
 
-- **Microsoft FLAML** por AutoML
-- **Binance API** por datos de mercado
-- **PyTorch** y **TensorFlow** ecosystems
-- **Rich** por la hermosa interfaz de consola
-- **MLflow** por el tracking de experimentos
-
----
 
 **✨ ¿Listo para transformar tus ideas en estrategias reales? ¡Comienza tu viaje con Hyperion hoy!**
 
@@ -278,5 +271,5 @@ pip install -r requirements.txt
 python main.py
 ```
 
-*Que el código esté contigo* 🚀
+*Gracias por leer hasta el final este es mi primer proyecto espero que este y los siguientes en los que trabajo puedan ser utiles.
 
