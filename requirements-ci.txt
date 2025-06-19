@@ -1,0 +1,12 @@
+# Minimal dependencies for CI
+numpy
+pandas
+pyyaml
+rich
+websockets
+psutil
+pytest
+pytest-asyncio
+pytest-cov
+torch==2.0.1
+apscheduler>=3.10.4

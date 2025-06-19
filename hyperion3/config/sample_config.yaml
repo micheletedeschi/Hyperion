@@ -1,0 +1,10 @@
+api:
+  exchange_id: binance
+
+data:
+  symbols: ["BTC/USDT"]
+  start_date: "2021-01-01"
+  end_date: "2021-01-10"
+
+model_type: patchtst
+trading_strategy: swing
