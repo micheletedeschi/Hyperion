@@ -165,21 +165,79 @@ def check_and_import_dependencies() -> Dict[str, bool]:
         dependency_status['sklearn_search'] = False
         print(f"❌ Sklearn search no disponible: {e}")
     
-    # Hyperion3 models imports
+    # Hyperion3 models imports - Verificar cada uno individualmente
+    hyperion_models_status = {}
+    hyperion_models_count = 0
+    
+    # PatchTST
     try:
         from hyperion3.models.transformers.patchtst import PatchTST
-        from hyperion3.models.transformers.tft import TFTCryptoPredictor
-        from hyperion3.models.rl_agents.rainbow_dqn import RainbowTradingAgent
-        from hyperion3.models.rl_agents.sac import SACTradingAgent
-        from hyperion3.models.rl_agents.td3 import TD3TradingAgent
-        from hyperion3.models.rl_agents.ensemble_agent import EnsembleAgent
-        HYPERION_MODELS_AVAILABLE = True
-        dependency_status['hyperion_models'] = True
-        print("🚀 Modelos avanzados Hyperion3 cargados exitosamente")
+        hyperion_models_status['patchtst'] = True
+        hyperion_models_count += 1
+        print("✅ PatchTST cargado correctamente")
     except ImportError as e:
-        HYPERION_MODELS_AVAILABLE = False
-        dependency_status['hyperion_models'] = False
-        print(f"⚠️ Modelos avanzados Hyperion3 no disponibles: {e}")
+        hyperion_models_status['patchtst'] = False
+        print(f"⚠️ PatchTST no disponible: {e}")
+    
+    # TFT
+    try:
+        from hyperion3.models.transformers.tft import TFTCryptoPredictor
+        hyperion_models_status['tft'] = True
+        hyperion_models_count += 1
+        print("✅ TFT cargado correctamente")
+    except ImportError as e:
+        hyperion_models_status['tft'] = False
+        print(f"⚠️ TFT no disponible: {e}")
+    
+    # Rainbow DQN
+    try:
+        from hyperion3.models.rl_agents.rainbow_dqn import RainbowTradingAgent
+        hyperion_models_status['rainbow_dqn'] = True
+        hyperion_models_count += 1
+        print("✅ RainbowDQN cargado correctamente")
+    except ImportError as e:
+        hyperion_models_status['rainbow_dqn'] = False
+        print(f"⚠️ RainbowDQN no disponible: {e}")
+    
+    # SAC
+    try:
+        from hyperion3.models.rl_agents.sac import SACTradingAgent
+        hyperion_models_status['sac'] = True
+        hyperion_models_count += 1
+        print("✅ SAC cargado correctamente")
+    except ImportError as e:
+        hyperion_models_status['sac'] = False
+        print(f"⚠️ SAC no disponible: {e}")
+    
+    # TD3
+    try:
+        from hyperion3.models.rl_agents.td3 import TD3TradingAgent
+        hyperion_models_status['td3'] = True
+        hyperion_models_count += 1
+        print("✅ TD3 cargado correctamente")
+    except ImportError as e:
+        hyperion_models_status['td3'] = False
+        print(f"⚠️ TD3 no disponible: {e}")
+    
+    # Ensemble Agent - Re-enabled with robust import handling
+    try:
+        from hyperion3.models.rl_agents.ensemble_agent import EnsembleAgent
+        hyperion_models_status['ensemble_agent'] = True
+        hyperion_models_count += 1
+        print("✅ EnsembleAgent disponible")
+    except ImportError as e:
+        hyperion_models_status['ensemble_agent'] = False
+        print(f"⚠️ EnsembleAgent no disponible: {e}")
+    
+    # Determinar estado general
+    HYPERION_MODELS_AVAILABLE = hyperion_models_count > 0
+    dependency_status['hyperion_models'] = HYPERION_MODELS_AVAILABLE
+    dependency_status['hyperion_models_detail'] = hyperion_models_status
+    
+    if HYPERION_MODELS_AVAILABLE:
+        print(f"🚀 Modelos avanzados Hyperion3: {hyperion_models_count}/6 cargados exitosamente")
+    else:
+        print("⚠️ Ningún modelo avanzado Hyperion3 disponible")
     
     # DiGA imports
     try:
@@ -459,6 +517,89 @@ def emergency_fallback_models(X_train, y_train, X_val, y_val) -> Dict[str, Any]:
         print(f"❌ Incluso el modelo de emergencia falló: {e}")
     
     return fallback_models
+
+def check_hyperion_models() -> Dict[str, bool]:
+    """
+    Verificar el estado de los modelos Hyperion3 individualmente
+    Returns: Dict con el estado de cada modelo
+    """
+    model_status = {}
+    
+    # PatchTST
+    try:
+        from hyperion3.models.transformers.patchtst import PatchTST
+        model_status['patchtst'] = True
+    except ImportError:
+        model_status['patchtst'] = False
+    
+    # TFT
+    try:
+        from hyperion3.models.transformers.tft import TFTCryptoPredictor
+        model_status['tft'] = True
+    except ImportError:
+        model_status['tft'] = False
+    
+    # Rainbow DQN
+    try:
+        from hyperion3.models.rl_agents.rainbow_dqn import RainbowTradingAgent
+        model_status['rainbow_dqn'] = True
+    except ImportError:
+        model_status['rainbow_dqn'] = False
+    
+    # SAC
+    try:
+        from hyperion3.models.rl_agents.sac import SACTradingAgent
+        model_status['sac'] = True
+    except ImportError:
+        model_status['sac'] = False
+    
+    # TD3
+    try:
+        from hyperion3.models.rl_agents.td3 import TD3TradingAgent
+        model_status['td3'] = True
+    except ImportError:
+        model_status['td3'] = False
+    
+    # Ensemble Agent
+    try:
+        from hyperion3.models.rl_agents.ensemble_agent import EnsembleAgent
+        model_status['ensemble_agent'] = True
+    except ImportError:
+        model_status['ensemble_agent'] = False
+    
+    return model_status
+
+def get_available_hyperion_models() -> List[str]:
+    """
+    Obtener lista de modelos Hyperion3 disponibles
+    Returns: Lista de nombres de modelos disponibles
+    """
+    status = check_hyperion_models()
+    return [model for model, available in status.items() if available]
+
+def print_hyperion_models_status():
+    """Imprimir estado detallado de modelos Hyperion3"""
+    status = check_hyperion_models()
+    available_count = sum(status.values())
+    total_count = len(status)
+    
+    print(f"\n🤖 Estado de Modelos Hyperion3: {available_count}/{total_count}")
+    print("=" * 50)
+    
+    for model, available in status.items():
+        status_icon = "✅" if available else "❌"
+        print(f"{status_icon} {model.upper().replace('_', ' ')}")
+    
+    print("=" * 50)
+    
+    if available_count == total_count:
+        print("🎉 Todos los modelos Hyperion3 están disponibles!")
+    elif available_count > 0:
+        print(f"⚠️ {available_count} de {total_count} modelos disponibles")
+    else:
+        print("❌ Ningún modelo Hyperion3 disponible")
+    
+    return status
 
 def initialize_environment() -> Tuple[Dict[str, bool], Dict[str, Any], List[str]]:
     """

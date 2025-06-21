@@ -3,12 +3,44 @@
 from typing import Dict, Any, Optional, Union, TYPE_CHECKING
 import logging
 
-from .transformers.patchtst import PatchTST
-from .transformers.tft import TFTCryptoPredictor
-from .rl_agents.sac import SACTradingAgent
-from .rl_agents.td3 import TD3TradingAgent
-from .rl_agents.rainbow_dqn import RainbowTradingAgent
-from .rl_agents.ensemble_agent import EnsembleAgent
+# Importaciones condicionales para evitar errores
+try:
+    from .transformers.patchtst import PatchTST
+    PATCHTST_AVAILABLE = True
+except ImportError:
+    PatchTST = None
+    PATCHTST_AVAILABLE = False
+
+try:
+    from .transformers.tft import TFTCryptoPredictor
+    TFT_AVAILABLE = True
+except ImportError:
+    TFTCryptoPredictor = None
+    TFT_AVAILABLE = False
+
+try:
+    from .rl_agents.sac import SACTradingAgent
+    SAC_AVAILABLE = True
+except ImportError:
+    SACTradingAgent = None
+    SAC_AVAILABLE = False
+
+try:
+    from .rl_agents.td3 import TD3TradingAgent
+    TD3_AVAILABLE = True
+except ImportError:
+    TD3TradingAgent = None
+    TD3_AVAILABLE = False
+
+try:
+    from .rl_agents.rainbow_dqn import RainbowTradingAgent
+    RAINBOW_AVAILABLE = True
+except ImportError:
+    RainbowTradingAgent = None
+    RAINBOW_AVAILABLE = False
+
+# Commented out temporarily due to import issues
+# from .rl_agents.ensemble_agent import EnsembleAgent
 from .base import BaseModel
 from .model_types import ModelType
 
@@ -28,14 +60,20 @@ class ModelFactory:
             config: Configuración opcional para los modelos
         """
         self.config = config
-        self.model_classes = {
-            ModelType.PATCHTST.value: PatchTST,
-            ModelType.TFT.value: TFTCryptoPredictor,
-            ModelType.SAC.value: SACTradingAgent,
-            ModelType.TD3.value: TD3TradingAgent,
-            ModelType.RAINBOW_DQN.value: RainbowTradingAgent,
-            ModelType.ENSEMBLE.value: EnsembleAgent,
-        }
+        self.model_classes = {}
+        
+        # Agregar modelos solo si están disponibles
+        if PATCHTST_AVAILABLE and PatchTST:
+            self.model_classes[ModelType.PATCHTST.value] = PatchTST
+        if TFT_AVAILABLE and TFTCryptoPredictor:
+            self.model_classes[ModelType.TFT.value] = TFTCryptoPredictor
+        if SAC_AVAILABLE and SACTradingAgent:
+            self.model_classes[ModelType.SAC.value] = SACTradingAgent
+        if TD3_AVAILABLE and TD3TradingAgent:
+            self.model_classes[ModelType.TD3.value] = TD3TradingAgent
+        if RAINBOW_AVAILABLE and RainbowTradingAgent:
+            self.model_classes[ModelType.RAINBOW_DQN.value] = RainbowTradingAgent
+        # ModelType.ENSEMBLE.value: EnsembleAgent,  # Temporarily commented out
 
         # Registrar tipos de modelos soportados
         self.supported_types = set(self.model_classes.keys())

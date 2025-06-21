@@ -356,7 +356,12 @@ class HyperionMainSystem:
             dep_count = "0"
             if self.environment_status:
                 gpu_device = self.environment_status.get('gpu_config', {}).get('pytorch_device', 'cpu')
-                dep_count = f"{sum(self.environment_status.get('dependencies', {}).values())}/11"
+                
+                # Contar solo dependencias booleanas, excluir diccionarios anidados
+                dependencies = self.environment_status.get('dependencies', {})
+                bool_deps = {k: v for k, v in dependencies.items() 
+                           if isinstance(v, bool) and k != 'hyperion_models_detail'}
+                dep_count = f"{sum(bool_deps.values())}/{len(bool_deps)}"
             
             header_panel = Panel.fit(
                 "[bold cyan]🚀 HYPERION3 - SISTEMA PROFESIONAL DE TRADING ML[/bold cyan]\n"
@@ -1913,31 +1918,65 @@ class HyperionMainSystem:
                 )
             self.console.print(table)
         
+        # Modelos disponibles para optimización
+        models_table = Table(title="🤖 Modelos Disponibles para Optimización", show_header=True, header_style="bold yellow")
+        models_table.add_column("Categoría", style="cyan")
+        models_table.add_column("Modelos", style="white")
+        
+        model_categories = {
+            'sklearn': 'RandomForest, GradientBoosting, Ridge, Lasso, ElasticNet, SVR, NuSVR, LinearSVR, KNeighbors, RadiusNeighbors, MLPRegressor, DecisionTree, ExtraTree, BayesianRidge, ARDRegression, HuberRegressor, TheilSen, RANSAC, PassiveAggressive, SGD, Tweedie, Poisson, Gamma, Quantile, PLSRegression, Dummy, Isotonic...',
+            'ensemble': 'XGBoost, LightGBM, CatBoost, StackingRegressor, VotingRegressor...',
+            'pytorch': 'SimpleMLP, DeepMLP, LSTM, CNN1D, Transformer...',
+            'automl': 'FLAML_AutoML, AutoSklearn, TPOT...',
+            'advanced': 'TFT (Temporal Fusion Transformer), PatchTST, SAC, TD3, RainbowDQN...'
+        }
+        
+        for category, models in model_categories.items():
+            models_table.add_row(category, models)
+        
+        self.console.print(models_table)
+        
         # Opciones disponibles
         options_panel = Panel(
             "[cyan]Opciones de optimización:[/cyan]\n"
-            "• [bold]new[/bold]: Nueva optimización\n"
+            "• [bold]categoría:[/bold] 'sklearn', 'ensemble', 'pytorch', 'automl', 'advanced'\n"
+            "• [bold]all:[/bold] Optimizar todos los modelos disponibles\n"
+            "• [bold]auto[/bold]: Optimización automática rápida (XGBoost)\n"
+            "• [bold]capabilities[/bold]: Ver todos los modelos disponibles\n\n"
+            "[yellow]Modelos específicos disponibles:[/yellow]\n"
+            "• [bold]Ensemble:[/bold] 'xgboost', 'lightgbm', 'catboost'\n"
+            "• [bold]Sklearn:[/bold] 'random_forest', 'gradient_boosting', 'ridge', 'lasso', 'elasticnet', 'svr', 'knn', 'mlp', 'decision_tree', 'bayes_ridge', 'huber', 'sgd'\n"
+            "• [bold]PyTorch:[/bold] 'simplemlp', 'deepmlp', 'lstm'\n"
+            "• [bold]AutoML:[/bold] 'flaml', 'autosklearn', 'tpot'\n"
+            "• [bold]Advanced:[/bold] 'tft', 'patchtst', 'sac', 'td3', 'rainbow_dqn'\n\n"
             "• [bold]load[/bold]: Cargar configuración guardada\n"
             "• [bold]compare[/bold]: Comparar resultados\n"
-            "• [bold]auto[/bold]: Optimización automática (XGBoost)\n"
             "• [bold]back[/bold]: Volver al menú principal",
-            title="⚙️ Opciones",
+            title="⚙️ Opciones de Optimización",  
             border_style="blue"
         )
         self.console.print(options_panel)
         
-        choice = Prompt.ask("🎯 Selecciona opción", choices=["new", "load", "compare", "auto", "back"], default="auto")
+        # Nueva selección con más opciones de hiperparámetros
+        choice = Prompt.ask("🎯 Selecciona opción o modelo específico")
         
         if choice == "back":
             return
         elif choice == "auto":
             self._auto_hyperopt()
-        elif choice == "new":
-            self._manual_hyperopt()
         elif choice == "load":
             self._load_hyperopt_config()
         elif choice == "compare":
             self._compare_hyperopt_results()
+        elif choice == "all":
+            self._optimize_all_models()
+        elif choice == "capabilities":
+            self._show_optimization_capabilities()
+        elif choice in ['sklearn', 'ensemble', 'pytorch', 'automl', 'advanced']:
+            self._optimize_category(choice)
+        else:
+            # Intentar optimizar un modelo específico
+            self._optimize_specific_model(choice)
     
     def _simple_hyperparams_menu(self):
         """Menú simple de hiperparámetros"""
@@ -2015,10 +2054,62 @@ class HyperionMainSystem:
             if self.console:
                 self.console.print(f"📊 Datos preparados: {X_train.shape[0]} samples, {X_train.shape[1]} features")
             
-            # Usar quick_optimize_hyperparameters para un modelo específico
-            from utils.hyperopt import quick_optimize_hyperparameters
+            # Usar optimize_hyperparameters con el tipo de modelo específico
+            from utils.hyperopt import optimize_hyperparameters
             
-            result = quick_optimize_hyperparameters(model_name, X_train, y_train, X_val, y_val, self.console, n_trials)
+            # Mapear nombres de modelos a categorías para el optimizador
+            model_to_optimizer_map = {
+                # Ensemble models
+                'xgboost': 'xgboost',
+                'lightgbm': 'lightgbm', 
+                'catboost': 'catboost',
+                # Sklearn models - usar categoria sklearn 
+                'random_forest': 'sklearn',
+                'gradient_boosting': 'sklearn',
+                'ridge': 'sklearn',
+                'lasso': 'sklearn',
+                'elasticnet': 'sklearn',
+                'svr': 'sklearn',
+                'nusvr': 'sklearn', 
+                'linearsvr': 'sklearn',
+                'kneighbors': 'sklearn',
+                'radiusneighbors': 'sklearn',
+                'mlp': 'sklearn',
+                'decision_tree': 'sklearn',
+                'extra_tree': 'sklearn',
+                'bayes_ridge': 'sklearn',
+                'ard_regression': 'sklearn',
+                'huber': 'sklearn',
+                'theilsen': 'sklearn',
+                'ransac': 'sklearn',
+                'passive_aggressive': 'sklearn',
+                'sgd': 'sklearn',
+                'tweedie': 'sklearn',
+                'poisson': 'sklearn',
+                'gamma': 'sklearn',
+                'quantile': 'sklearn',
+                'pls': 'sklearn',
+                'dummy': 'sklearn',
+                'isotonic': 'sklearn',
+                # PyTorch models
+                'simplemlp': 'pytorch',
+                'deepmlp': 'pytorch',
+                'lstm': 'pytorch',
+                # AutoML
+                'flaml': 'automl',
+                'autosklearn': 'automl',
+                'tpot': 'automl',
+                # Advanced
+                'tft': 'tft',
+                'patchtst': 'patchtst',
+                'sac': 'rl_agents',
+                'td3': 'rl_agents',
+                'rainbow_dqn': 'rl_agents'
+            }
+            
+            optimizer_type = model_to_optimizer_map.get(model_name, model_name)
+            
+            result = optimize_hyperparameters(X_train, y_train, X_val, y_val, optimizer_type, n_trials, self.console)
             
             # Procesar resultado - puede venir en diferentes formatos
             best_params = {}
@@ -2185,6 +2276,155 @@ class HyperionMainSystem:
                 score_str = f"{best_score:.4f}" if isinstance(best_score, (int, float)) and not (np.isnan(best_score) or np.isinf(best_score)) else "N/A"
                 print(f"  {config.get('model', 'N/A')} - Score: {score_str}")
     
+    def _optimize_all_models(self):
+        """Optimizar todos los modelos disponibles"""
+        models = [
+            # Ensemble básicos
+            'xgboost', 'lightgbm', 'catboost', 
+            # Sklearn principales
+            'random_forest', 'gradient_boosting', 'ridge', 'lasso', 'svr', 'kneighbors',
+            # PyTorch
+            'simplemlp', 'deepmlp', 'lstm'
+        ]
+        
+        if self.console:
+            self.console.print("[bold green]🚀 Optimizando todos los modelos...[/bold green]")
+        
+        results = {}
+        for model in models:
+            if self.console:
+                self.console.print(f"[cyan]Optimizando {model}...[/cyan]")
+            else:
+                print(f"Optimizando {model}...")
+            
+            result = self._run_hyperopt_optimization(model)
+            results[model] = result
+            
+            if result.get('status') == 'completed':
+                if self.console:
+                    score_str = f"{result.get('best_score', 0):.4f}" if isinstance(result.get('best_score'), (int, float)) else "N/A"
+                    self.console.print(f"[green]✅ {model} completado - Score: {score_str}[/green]")
+                else:
+                    print(f"✅ {model} completado")
+            else:
+                if self.console:
+                    self.console.print(f"[red]❌ {model} falló[/red]")
+                else:
+                    print(f"❌ {model} falló")
+        
+        # Mostrar resumen final
+        if self.console:
+            self.console.print("\n[bold blue]📊 Resumen de optimización:[/bold blue]")
+            for model, result in results.items():
+                if result.get('status') == 'completed':
+                    score_str = f"{result.get('best_score', 0):.4f}" if isinstance(result.get('best_score'), (int, float)) else "N/A"
+                    self.console.print(f"  {model}: Score {score_str}")
+                else:
+                    self.console.print(f"  {model}: [red]Error[/red]")
+
+    def _optimize_category(self, category: str):
+        """Optimizar modelos de una categoría específica"""
+        category_models = {
+            'sklearn': [
+                'random_forest', 'gradient_boosting', 'ridge', 'lasso', 'elasticnet', 
+                'svr', 'nusvr', 'linearsvr', 'kneighbors', 'radiusneighbors', 
+                'mlp', 'decision_tree', 'extra_tree', 'bayes_ridge', 'ard_regression',
+                'huber', 'theilsen', 'ransac', 'passive_aggressive', 'sgd', 
+                'tweedie', 'poisson', 'gamma', 'quantile', 'pls', 'dummy', 'isotonic'
+            ],
+            'ensemble': ['xgboost', 'lightgbm', 'catboost'],
+            'pytorch': ['simplemlp', 'deepmlp', 'lstm'],
+            'automl': ['flaml', 'autosklearn', 'tpot'],
+            'advanced': ['tft', 'patchtst', 'sac', 'td3', 'rainbow_dqn']
+        }
+        
+        models = category_models.get(category, [])
+        
+        if not models:
+            if self.console:
+                self.console.print(f"[yellow]⚠️ No hay modelos disponibles para la categoría '{category}'[/yellow]")
+            else:
+                print(f"⚠️ No hay modelos disponibles para la categoría '{category}'")
+            return
+        
+        if self.console:
+            self.console.print(f"[bold green]🚀 Optimizando modelos de categoría '{category}'...[/bold green]")
+        
+        results = {}
+        for model in models:
+            if self.console:
+                self.console.print(f"[cyan]Optimizando {model}...[/cyan]")
+            else:
+                print(f"Optimizando {model}...")
+            
+            result = self._run_hyperopt_optimization(model)
+            results[model] = result
+            
+            if result.get('status') == 'completed':
+                if self.console:
+                    score_str = f"{result.get('best_score', 0):.4f}" if isinstance(result.get('best_score'), (int, float)) else "N/A"
+                    self.console.print(f"[green]✅ {model} completado - Score: {score_str}[/green]")
+            else:
+                if self.console:
+                    self.console.print(f"[red]❌ {model} falló[/red]")
+
+    def _optimize_specific_model(self, model_name: str):
+        """Optimizar un modelo específico"""
+        if self.console:
+            self.console.print(f"[bold green]🎯 Optimizando modelo específico: {model_name}[/bold green]")
+        else:
+            print(f"🎯 Optimizando modelo específico: {model_name}")
+        
+        # Permitir números de trials personalizados
+        if self.console:
+            from rich.prompt import Prompt
+            n_trials = int(Prompt.ask("Número de pruebas", default="50"))
+        else:
+            try:
+                n_trials = int(input("Número de pruebas [50]: ") or "50")
+            except ValueError:
+                n_trials = 50
+        
+        result = self._run_hyperopt_optimization(model_name, n_trials)
+        self._show_hyperopt_result(result)
+
+    def _show_optimization_capabilities(self):
+        """Mostrar todas las capacidades de optimización disponibles"""
+        try:
+            from utils.hyperopt import HyperparameterOptimizer
+            
+            optimizer = HyperparameterOptimizer(console=self.console)
+            
+            if self.console:
+                self.console.print("[bold cyan]🎯 Mostrando capacidades de optimización disponibles...[/bold cyan]")
+                optimizer.print_optimization_summary()
+            else:
+                print("🎯 Capacidades de optimización:")
+                capabilities = optimizer.get_optimization_capabilities()
+                
+                for category, info in capabilities['model_categories'].items():
+                    if category == 'sklearn' and info.get('available'):
+                        print(f"  📚 Sklearn: {len(info['models'])} modelos disponibles")
+                        print(f"     Ejemplos: {', '.join(info['models'][:5])}...")
+                    elif category == 'ensemble':
+                        available = [k for k, v in info.items() if v and k != 'available']
+                        if available:
+                            print(f"  🌟 Ensemble: {', '.join(available)}")
+                    elif category == 'deep_learning' and info.get('pytorch'):
+                        print(f"  🧠 PyTorch: {', '.join(info['models'])}")
+                    elif category == 'automl':
+                        available = [k for k, v in info.items() if v and k != 'available']
+                        if available:
+                            print(f"  🤖 AutoML: {', '.join(available)}")
+                    elif category == 'reinforcement_learning' and info.get('available'):
+                        print(f"  🎮 RL Agents: {', '.join(info['agents'])}")
+                
+        except Exception as e:
+            if self.console:
+                self.console.print(f"[red]❌ Error mostrando capacidades: {e}[/red]")
+            else:
+                print(f"❌ Error mostrando capacidades: {e}")
+
     def ensembles_menu(self):
         """Menú de ensembles"""
         if not self.console:

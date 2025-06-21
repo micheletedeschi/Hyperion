@@ -1,4 +1,4 @@
-# Hyperion: Un Framework de Trading Algorítmico Forjado en la Obsesión
+# Hyperion: An Algorithmic Trading Framework Forged in Obsession
 
 ![Version](https://img.shields.io/badge/version-3.0-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.8+-brightgreen.svg)
@@ -7,64 +7,64 @@
 ![AI](https://img.shields.io/badge/AI-enabled-purple.svg)
 ![MLOps](https://img.shields.io/badge/MLOps-integrated-orange.svg)
 
-> "Hyperion no es solo código. Es la respuesta a un desafío que me cautivó por completo. Es la herramienta que desearía haber tenido cuando empecé."
+> "Hyperion is not just code. It's the answer to a challenge that completely captivated me. It's the tool I wish I had when I started."
 
-(esta es aun una version beta no todas las partes del bot estan funcionando bien todavia, pero entre mas dias pasan mas me doy cuenta de que nunca sera tan perfecto como sueño asi que mejor decidi mostrar lo que esta avanzado, en los proximos dias arreglare los errores que quedan e implementare todas las funciones gracias por leer espero poder estar a la altura)
+(This is still a beta version - not all parts of the bot are working perfectly yet, but as more days pass, I realize it will never be as perfect as I dream, so I decided to show what's been developed. In the coming days, I'll fix the remaining errors and implement all the features. Thanks for reading, I hope to be up to the challenge)
 
-## 🚨 ADVERTENCIA CRÍTICA - LEE ESTO PRIMERO
+## 🚨 CRITICAL WARNING - READ THIS FIRST
 
 <table>
 <tr>
 <td>
-<h3>⚠️ RIESGO FINANCIERO EXTREMO</h3>
+<h3>⚠️ EXTREME FINANCIAL RISK</h3>
 
-**Hyperion es una herramienta de INVESTIGACIÓN y APRENDIZAJE, NO una máquina de hacer dinero.**
+**Hyperion is a RESEARCH and LEARNING tool, NOT a money-making machine.**
 
-- 🔮 **Los backtests NO garantizan rendimientos futuros**
-- 🌪️ **El mercado real es caótico e impredecible**
-- 💰 **NUNCA inviertas dinero que no puedas permitirte perder**
-- ⚖️ **Úsalo bajo tu COMPLETA responsabilidad**
-- 🧪 **Practica SIEMPRE en paper trading primero**
+- 🔮 **Backtests do NOT guarantee future returns**
+- 🌪️ **The real market is chaotic and unpredictable**
+- 💰 **NEVER invest money you can't afford to lose**
+- ⚖️ **Use it under your COMPLETE responsibility**
+- 🧪 **ALWAYS practice in paper trading first**
 
-**El trading algorítmico requiere conocimiento profundo, gestión de riesgos y comprensión de que las pérdidas son parte del juego.**
+**Algorithmic trading requires deep knowledge, risk management, and understanding that losses are part of the game.**
 </td>
 </tr>
 </table>
 
-## 💫 La Historia Detrás de Hyperion
+## 💫 The Story Behind Hyperion
 
-Hola, soy el creador de Hyperion. Giovanni pero me Gusta mas Ganador Permíteme contarte una historia.
+Hello, I'm the creator of Hyperion. Giovanni, but I prefer to be called Ganador (Winner). Let me tell you a story.
 
-Siempre soñé con crear un bot de trading que operara de forma autónoma, una máquina inteligente capaz de navegar los turbulentos mares del mercado. Cuando empecé, mi ingenuidad me hizo pensar que sería una tarea fácil. Creí que en un par de fines de semana tendría algo funcionando.
+I always dreamed of creating a trading bot that operated autonomously, an intelligent machine capable of navigating the turbulent seas of the market. When I started, my naivety made me think it would be an easy task. I believed that in a couple of weekends I would have something working.
 
-**Qué equivocado estaba.**
+**How wrong I was.**
 
-Pronto me di de bruces con la realidad: construir un bot de vanguardia, partiendo desde cero y en solitario, es un desafío colosal. Me sumergí en un océano de papers de investigación, arquitecturas de modelos y técnicas de preprocesamiento, y cada nueva capa de conocimiento revelaba diez más que desconocía.
+I soon came face to face with reality: building a cutting-edge bot, starting from scratch and alone, is a colossal challenge. I immersed myself in an ocean of research papers, model architectures, and preprocessing techniques, and each new layer of knowledge revealed ten more that I didn't know.
 
-Al buscar ayuda, me di cuenta de que el panorama de los bots de trading públicos y gratuitos era desolador. La mayoría eran demasiado simples, cajas negras sin flexibilidad, o directamente inútiles. Sentí una frustración inmensa. ¿Cómo podía alguien, con más ganas que experiencia, empezar en este mundo?
+When looking for help, I realized that the landscape of public and free trading bots was bleak. Most were too simple, black boxes without flexibility, or directly useless. I felt immense frustration. How could someone, with more desire than experience, start in this world?
 
-Fue en ese momento de frustración y desafío que **nació Hyperion**. Decidí que si la herramienta que necesitaba no existía, la construiría yo mismo.
+It was in that moment of frustration and challenge that **Hyperion was born**. I decided that if the tool I needed didn't exist, I would build it myself.
 
-Este proyecto es el resultado de incontables horas de trabajo, de prueba y error, de pequeños fracasos y grandes victorias. Mi esperanza más sincera es que Hyperion te ahorre parte de ese difícil camino y te dé el poder para que tú también puedas transformar tus ideas en estrategias reales.
+This project is the result of countless hours of work, trial and error, small failures and great victories. My most sincere hope is that Hyperion saves you part of that difficult path and gives you the power so that you too can transform your ideas into real strategies.
 
 ## 🚀 Quick Start
 
-### 🎯 Inicio Completo (5 minutos)
+### 🎯 Complete Setup (5 minutes)
 ```bash
-# 1. Inicia el sistema profesional (RECOMENDADO)
+# 1. Start the professional system (RECOMMENDED)
 pip install -r requirements.txt
 python main.py
 
-# 2. accede directamente a la interfaz profesional
+# 2. Access the professional interface directly
 python main_professional.py
 
-# 3. Valida la estructura modular
+# 3. Validate the modular structure
 python test_modular_structure.py
 ```
 
-## 🏗️ El Pipeline de Hyperion: Anatomía de una Idea
+## 🏗️ The Hyperion Pipeline: Anatomy of an Idea
 
-Hyperion está diseñado como un **pipeline modular y automatizado** que transforma datos de mercado en bruto en estrategias de trading robustas y validadas. Todo el proceso se controla desde un único archivo de configuración (`config.json`), simplificando un flujo de trabajo que de otro modo sería extremadamente complejo.
+Hyperion is designed as a **modular and automated pipeline** that transforms raw market data into robust and validated trading strategies. The entire process is controlled from a single configuration file (`config.json`), simplifying a workflow that would otherwise be extremely complex.
 
 ```
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
@@ -79,197 +79,264 @@ Hyperion está diseñado como un **pipeline modular y automatizado** que transfo
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
-### 🧠 Etapa 1: Configuración (config.json)
-**El Cerebro de la Operación**: Aquí defines todo: el par de criptomonedas (ej. BTC/USDT), el intervalo de tiempo (1h, 4h, 1d), las fechas de inicio y fin, y lo más importante: la lista de modelos que quieres poner a prueba y la configuración del optimizador.
+### 🧠 Stage 1: Configuration (config.json)
+**The Brain of the Operation**: Here you define everything: the cryptocurrency pair (e.g., BTC/USDT), the time interval (1h, 4h, 1d), start and end dates, and most importantly: the list of models you want to test and the optimizer configuration.
 
-### 📊 Etapa 2: Adquisición de Datos (hyperion3/data/downloader.py)
-Hyperion se conecta a las fuentes de datos y descarga el historial de precios OHLCV (Open, High, Low, Close, Volume) para el activo que especificaste. Los datos se guardan localmente para un acceso rápido y reutilización.
+### 📊 Stage 2: Data Acquisition (hyperion3/data/downloader.py)
+Hyperion connects to data sources and downloads the OHLCV (Open, High, Low, Close, Volume) price history for the asset you specified. Data is saved locally for quick access and reuse.
 
-### ⚙️ Etapa 3: Preprocesamiento e Ingeniería de Características
-**Limpieza y Preparación**: Los datos crudos se limpian de valores faltantes y se preparan para el análisis.
+### ⚙️ Stage 3: Preprocessing and Feature Engineering
+**Cleaning and Preparation**: Raw data is cleaned of missing values and prepared for analysis.
 
-**Creación de Inteligencia**: ¡Aquí ocurre la magia! Hyperion no solo usa el precio. Genera un arsenal de **más de 100 características (features)** para darle a los modelos un contexto profundo del mercado:
+**Intelligence Creation**: Here's where the magic happens! Hyperion doesn't just use price. It generates an arsenal of **more than 100 features** to give models deep market context:
 
-- **📈 Indicadores de Momentum**: RSI, Estocástico, MACD, Williams %R
-- **📊 Indicadores de Tendencia**: Medias Móviles (SMA, EMA), Bandas de Bollinger, ADX, Ichimoku Cloud, Vortex
-- **� Indicadores de Volatilidad**: ATR (Average True Range), Keltner Channels
-- **📊 Análisis de Volumen**: On-Balance Volume (OBV)
-- **🕯️ Patrones de Velas Japonesas**: Doji, Engulfing, Hammer, etc.
-- **🎭 Aumentación de Datos**: Para evitar sobreajuste, se crean variaciones sintéticas de los datos
+- **📈 Momentum Indicators**: RSI, Stochastic, MACD, Williams %R
+- **📊 Trend Indicators**: Moving Averages (SMA, EMA), Bollinger Bands, ADX, Ichimoku Cloud, Vortex
+- **💨 Volatility Indicators**: ATR (Average True Range), Keltner Channels
+- **📊 Volume Analysis**: On-Balance Volume (OBV)
+- **🕯️ Japanese Candlestick Patterns**: Doji, Engulfing, Hammer, etc.
+- **🎭 Data Augmentation**: To avoid overfitting, synthetic variations of the data are created
 
-### 🔬 Etapa 4: Optimización de Hiperparámetros y Entrenamiento
-**La Búsqueda de la Perfección (AutoML)**: Un modelo sin los hiperparámetros correctos es ineficiente. Hyperion integra **FLAML**, una potente y ligera librería de AutoML de Microsoft. En lugar de una búsqueda a ciegas, FLAML utiliza algoritmos de búsqueda inteligentes para explorar eficientemente el espacio de posibles configuraciones.
+### 🔬 Stage 4: Advanced Hyperparameter Optimization
+**The Search for Perfection**: Hyperion features a sophisticated multi-engine optimization system that automatically discovers optimal parameters for **50+ models** across multiple categories.
 
-### 🤝 Etapa 5: Creación de Ensambles
-**La Sabiduría de la Multitud**: En lugar de confiar en un solo "genio", Hyperion puede combinar las predicciones de tus mejores modelos en un ensamble. Esto a menudo conduce a decisiones más estables y robustas.
+#### 🎯 **Optimization Engines**:
+- **🔥 Optuna**: Bayesian optimization with TPE (Tree-structured Parzen Estimator) sampler for intelligent parameter space exploration
+- **⚡ FLAML**: Microsoft's AutoML framework for rapid optimization with resource constraints
+- **🧠 Scikit-learn**: Traditional GridSearch/RandomSearch for comprehensive parameter coverage
+- **🎲 TPOT**: Genetic programming for automated pipeline optimization
 
-### 🧪 Etapa 6: Backtesting Riguroso
-**La Prueba de Fuego**: El Backtester simula cómo habría funcionado tu estrategia en el pasado, operación por operación. Te proporciona métricas críticas como el Retorno Total, el Sharpe Ratio, el Máximo Drawdown y la tasa de aciertos.
+#### 📊 **Supported Model Categories** (50+ models):
 
-### 📈 Etapa 7: Análisis y MLOps
-**Reproducibilidad y Transparencia**: Cada detalle de tu experimento se registra automáticamente con MLflow. Esto te permite comparar diferentes enfoques y volver a cualquier punto de tu investigación sin perderte.
+**🌳 Scikit-learn Models (35+ algorithms)**:
+- *Tree-based*: RandomForest, GradientBoosting, ExtraTrees, AdaBoost, Bagging, HistGradientBoosting
+- *Linear Models*: Ridge, Lasso, ElasticNet, BayesianRidge, ARDRegression, HuberRegressor, TheilSenRegressor, RANSACRegressor
+- *SVM Variants*: SVR, NuSVR, LinearSVR with RBF/Polynomial/Linear kernels
+- *Neural Networks*: MLPRegressor with customizable architectures
+- *Advanced*: GaussianProcess, KernelRidge, QuantileRegressor, TweedieRegressor, PoissonRegressor, GammaRegressor
 
-## 🤖 El Arsenal de Modelos: Un Espectro Completo de Inteligencia
+**⚡ Gradient Boosting Libraries**:
+- **XGBoost**: Full parameter space optimization with GPU acceleration support
+- **LightGBM**: High-performance boosting with memory-efficient optimization
+- **CatBoost**: Categorical feature handling with automatic GPU detection
 
-Hyperion integra una biblioteca de modelos excepcionalmente diversa, permitiéndote abordar el problema desde múltiples ángulos. Todos los modelos son instanciados a través de `hyperion3/models/model_factory.py`.
+**🧠 Deep Learning Models**:
+- **PyTorch**: SimpleMLP, DeepMLP, LSTM networks with architecture optimization
+- **Transformers**: Temporal Fusion Transformer (TFT), PatchTST with attention mechanism tuning
+- **Custom**: Neural architecture search for optimal layer configurations
 
-### 📊 1. Modelos Clásicos y Estadísticos
-- **Prophet**: Desarrollado por Facebook, excelente para capturar estacionalidades y tendencias de forma robusta
+**🎮 Reinforcement Learning Agents**:
+- **SAC** (Soft Actor-Critic): Continuous action spaces with entropy regularization
+- **TD3** (Twin Delayed DDPG): Policy gradient methods with noise injection
+- **Rainbow DQN**: Multi-improvement DQN with distributional learning
 
-### 🌳 2. Modelos de Machine Learning (Basados en Árboles)
-La columna vertebral de la ciencia de datos moderna. Son rápidos, interpretables y muy potentes:
+#### 🚀 **Advanced Optimization Features**:
+```python
+# Comprehensive optimization example
+from utils.hyperopt import HyperparameterOptimizer
 
-- **🚀 LightGBM**: La opción más rápida. Utiliza crecimiento leaf-wise extremadamente eficiente
-- **🏆 XGBoost**: El estándar de oro. Famoso por su rendimiento y regularización anti-overfitting
-- **🎯 CatBoost**: Especialmente diseñado para manejar datos de forma eficiente, muy robusto
-- **🌲 RandomForest y ExtraTrees**: Ensambles de múltiples árboles para mejorar robustez
+# Initialize with GPU configuration
+optimizer = HyperparameterOptimizer(
+    console=console,
+    gpu_config={
+        'xgboost_params': {'tree_method': 'gpu_hist'},
+        'lightgbm_params': {'device': 'gpu'},
+        'catboost_params': {'task_type': 'GPU'}
+    }
+)
 
-### 🧠 3. Modelos de Deep Learning para Series Temporales
-Diseñados específicamente para capturar dependencias temporales complejas:
+# Optimize all 50+ models
+results = optimizer.optimize_all_models(
+    X_train, y_train, X_val, y_val, 
+    n_trials=100  # Bayesian optimization trials
+)
 
-- **📈 N-BEATS**: Descompone la serie temporal en componentes interpretables
-- **⚡ N-HITS**: Evolución de N-BEATS con mejor eficiencia y espectro de frecuencias
-- **🔥 TFT (Temporal Fusion Transformer)**: Fusiona diferentes tipos de datos con mecanismos de atención
-- **💎 PatchTST (Transformer)**: ¡La joya de la corona! Basado en la arquitectura Transformer de Google, procesa la serie temporal en "parches" para capturar relaciones a corto y largo plazo
+# Category-specific optimization
+sklearn_best = optimizer.optimize_sklearn_models(X_train, y_train, X_val, y_val, n_trials=50)
+rl_best = optimizer.optimize_rl_agents(X_train, y_train, X_val, y_val, n_trials=30)
+```
 
-### 🎮 4. Aprendizaje por Refuerzo (Reinforcement Learning)
-**El cambio de paradigma más radical**. En lugar de predecir el futuro, los agentes aprenden a actuar para maximizar recompensas:
+#### 🎨 **Smart Parameter Spaces**:
+- **Dynamic ranges**: Parameters automatically adjusted based on dataset characteristics
+- **Model-specific constraints**: Each algorithm has tailored parameter boundaries
+- **Multi-objective**: Simultaneous optimization for accuracy, speed, and memory usage
+- **Early stopping**: Intelligent trial pruning with Optuna's median stopping
+- **Cross-validation**: Integrated CV for robust hyperparameter validation
 
-- **🎭 SAC (Soft Actor-Critic)**: Algoritmo moderno, eficiente y muy estable
-- **🎯 TD3 (Twin Delayed DDPG)**: Robusto, diseñado para mitigar sobreestimación de valores
-- **🌈 Rainbow DQN**: Mejora del clásico DQN que combina múltiples técnicas
+### 🤝 Stage 5: Ensemble Creation
+**The Wisdom of the Crowd**: Instead of relying on a single "genius", Hyperion can combine the predictions of your best models in an ensemble. This often leads to more stable and robust decisions.
 
-**¿Cómo funciona el RL?** El agente es el "trader". Observa el mercado y decide acciones (comprar/vender/mantener). Si gana, recibe recompensa positiva. Después de miles de simulaciones, aprende una política para maximizar ganancias. Es lo más cercano a enseñar a una IA a "pensar" como un trader.
+### 🧪 Stage 6: Rigorous Backtesting
+**The Trial by Fire**: The Backtester simulates how your strategy would have performed in the past, trade by trade. It provides you with critical metrics like Total Return, Sharpe Ratio, Maximum Drawdown, and hit rate.
 
-## ✨ Interfaz Profesional
+### 📈 Stage 7: Analysis and MLOps
+**Reproducibility and Transparency**: Every detail of your experiment is automatically recorded with MLflow. This allows you to compare different approaches and return to any point in your research without getting lost.
 
-Hyperion3 cuenta con una **interfaz profesional completa**:
+## 🤖 The Model Arsenal: A Complete Spectrum of Intelligence
 
-### 🎯 **Características del Menú Principal**
-- **🤖 MODELS**: Entrena modelos individuales por categoría (sklearn, ensemble, pytorch, automl)
-- **🎯 HYPERPARAMETERS**: Optimización automática y manual de hiperparámetros
-- **🎭 ENSEMBLES**: Crea y gestiona ensambles (voting, weighted, stacking, bagging)
-- **📊 ANALYSIS**: Análisis completo de resultados y métricas de rendimiento
-- **⚙️ CONFIGURATION**: Gestión de configuración del sistema
-- **📈 MONITORING**: Monitoreo del sistema en tiempo real
+Hyperion integrates an exceptionally diverse model library, allowing you to approach the problem from multiple angles. All models are instantiated through `hyperion3/models/model_factory.py`.
 
-### 🔧 **Opciones de Entrenamiento Modular**
+### 📊 1. Classical and Statistical Models
+- **Prophet**: Developed by Facebook, excellent for capturing seasonalities and trends robustly
+
+### 🌳 2. Machine Learning Models (Tree-Based)
+The backbone of modern data science. They are fast, interpretable, and very powerful:
+
+- **🚀 LightGBM**: The fastest option. Uses extremely efficient leaf-wise growth
+- **🏆 XGBoost**: The gold standard. Famous for its performance and anti-overfitting regularization
+- **🎯 CatBoost**: Specially designed to handle data efficiently, very robust
+- **🌲 RandomForest and ExtraTrees**: Ensembles of multiple trees to improve robustness
+
+### 🧠 3. Deep Learning Models for Time Series
+Specifically designed to capture complex temporal dependencies:
+
+- **📈 N-BEATS**: Decomposes the time series into interpretable components
+- **⚡ N-HITS**: Evolution of N-BEATS with better efficiency and frequency spectrum
+- **🔥 TFT (Temporal Fusion Transformer)**: Fuses different types of data with attention mechanisms
+- **💎 PatchTST (Transformer)**: The crown jewel! Based on Google's Transformer architecture, processes the time series in "patches" to capture short and long-term relationships
+
+### 🎮 4. Reinforcement Learning (RL)
+**The most radical paradigm shift**. Instead of predicting the future, agents learn to act to maximize rewards:
+
+- **🎭 SAC (Soft Actor-Critic)**: Modern, efficient and very stable algorithm
+- **🎯 TD3 (Twin Delayed DDPG)**: Robust, designed to mitigate value overestimation
+- **🌈 Rainbow DQN**: Improvement of the classic DQN that combines multiple techniques
+
+**How does RL work?** The agent is the "trader". It observes the market and decides actions (buy/sell/hold). If it wins, it receives positive reward. After thousands of simulations, it learns a policy to maximize profits. It's the closest thing to teaching an AI to "think" like a trader.
+
+## ✨ Professional Interface
+
+Hyperion3 features a **complete professional interface**:
+
+### 🎯 **Main Menu Features**
+- **🤖 MODELS**: Train individual models by category (sklearn, ensemble, pytorch, automl)
+- **🎯 HYPERPARAMETERS**: Automatic and manual hyperparameter optimization
+- **🎭 ENSEMBLES**: Create and manage ensembles (voting, weighted, stacking, bagging)
+- **📊 ANALYSIS**: Complete analysis of results and performance metrics
+- **⚙️ CONFIGURATION**: System configuration management
+- **📈 MONITORING**: Real-time system monitoring
+
+### 🔧 **Modular Training Options**
 ```bash
-# Entrena modelos específicos
-s1, s2, s3...    # modelos sklearn (Random Forest, Gradient Boosting, etc.)
-e1, e2, e3...    # modelos ensemble (XGBoost, LightGBM, CatBoost)
-p1, p2, p3...    # modelos pytorch (MLP, LSTM, Transformer)
-a1, a2...        # modelos automl (FLAML, Optuna)
+# Train specific models
+s1, s2, s3...    # sklearn models (Random Forest, Gradient Boosting, etc.)
+e1, e2, e3...    # ensemble models (XGBoost, LightGBM, CatBoost)
+p1, p2, p3...    # pytorch models (MLP, LSTM, Transformer)
+a1, a2...        # automl models (FLAML, Optuna)
 
-# Entrena por categoría
+# Train by category
 sklearn, ensemble, pytorch, automl
 
-# Entrena todos los modelos
+# Train all models
 all
 ```
 
-## 🚀 Instalación
+## 🚀 Installation
 
-### Instalación Rápida
+### Quick Installation
 ```bash
 pip install -r requirements.txt
 ```
 
-### 🍎 Para usuarios de Apple Silicon
+### 🍎 For Apple Silicon users
 ```bash
 ./install_mac.sh
 ```
 
-### 📋 Requisitos
+### 📋 Requirements
 - **Python 3.8+**
-- **SO Unix** (Linux o macOS recomendado)
-- **Opcional**: GPU con CUDA para modelos de deep learning
+- **Unix OS** (Linux or macOS recommended)
+- **Optional**: GPU with CUDA for deep learning models
 
-Ver [docs/INSTALLATION.md](docs/INSTALLATION.md) para instrucciones detalladas.
+See [docs/INSTALLATION.md](docs/INSTALLATION.md) for detailed instructions.
 
-## 🏗️ Arquitectura del Proyecto
+## 🏗️ Project Architecture
 
-El código está organizado en paquetes modulares:
+The code is organized in modular packages:
 
-- **`hyperion3/models/`** – transformers y agentes de RL
-- **`hyperion3/training/`** – loops de entrenamiento y callbacks
-- **`hyperion3/evaluations/`** – backtester y métricas financieras
-- **`hyperion3/optimization/`** – utilidades AutoML con FLAML
-- **`hyperion3/data/`** – descargadores, preprocessing e ingeniería de features
-- **`scripts/deployment/`** – motor de trading en vivo y monitoreo
-- **`scripts/`** – comandos auxiliares para entrenamiento y testing
-- **`docs/`** – documentación adicional
+- **`hyperion3/models/`** – transformers and RL agents
+- **`hyperion3/training/`** – training loops and callbacks
+- **`hyperion3/evaluations/`** – backtester and financial metrics
+- **`hyperion3/optimization/`** – AutoML utilities with FLAML
+- **`hyperion3/data/`** – downloaders, preprocessing and feature engineering
+- **`scripts/deployment/`** – live trading engine and monitoring
+- **`scripts/`** – auxiliary commands for training and testing
+- **`docs/`** – additional documentation
 
-### 🎨 Características Profesionales
-- **🎨 Rich UI**: Interfaz de consola hermosa con la librería Rich
-- **🔧 Diseño Modular**: Separación limpia en módulos utils/
-- **⚡ Rendimiento**: Optimizado para Apple Silicon (MPS) y CUDA
-- **💾 Auto-Save**: Guardado automático de modelos, resultados y configuraciones
-- **📊 Analytics**: Herramientas de análisis y comparación integradas
+### 🎨 Professional Features
+- **🎨 Rich UI**: Beautiful console interface with Rich library
+- **🔧 Modular Design**: Clean separation in utils/ modules
+- **⚡ Performance**: Optimized for Apple Silicon (MPS) and CUDA
+- **💾 Auto-Save**: Automatic saving of models, results and configurations
+- **📊 Analytics**: Integrated analysis and comparison tools
 
-### 📈 Características Avanzadas
-- **📊 Datos en tiempo real** con API de Binance
-- **🧪 Backtesting avanzado** con múltiples estrategias
-- **⚠️ Gestión de riesgos** y optimización de portfolio
-- **🔬 Integración MLOps** con seguimiento de experimentos
-- **⏰ Análisis multi-timeframe** y predicción
+### 📈 Advanced Features
+- **📊 Real-time data** with Binance API
+- **🧪 Advanced backtesting** with multiple strategies
+- **⚠️ Risk management** and portfolio optimization
+- **🔬 MLOps integration** with experiment tracking
+- **⏰ Multi-timeframe analysis** and prediction
 
-## 📊 Gestión de Datasets
+## 📊 Dataset Management
 
-Los datasets en bruto residen en `data/`. Utiliza los scripts de preprocesamiento proporcionados para generar características y aumentaciones. La clase `DataConfig` controla símbolos, ventanas de lookback y fuentes de datos adicionales como sentiment, orderbook o métricas on-chain.
+Raw datasets reside in `data/`. Use the provided preprocessing scripts to generate features and augmentations. The `DataConfig` class controls symbols, lookback windows, and additional data sources like sentiment, orderbook, or on-chain metrics.
 
-Ver [`docs/DATA_MANAGEMENT.md`](docs/DATA_MANAGEMENT.md) para un tutorial completo.
+See [`docs/DATA_MANAGEMENT.md`](docs/DATA_MANAGEMENT.md) for a complete tutorial.
 
-## 📚 Documentación
+## 📚 Documentation
 
-Guías adicionales disponibles en el directorio `docs/`:
+Additional guides available in the `docs/` directory:
 
-- [`BACKTESTER.md`](docs/BACKTESTER.md) – motor de backtesting avanzado
-- [`EXPERIMENTS.md`](docs/EXPERIMENTS.md) – ejecutar experimentos configurables
-- [`VALIDATORS.md`](docs/VALIDATORS.md) – helpers de validación cruzada
-- [`INSTALLATION.md`](docs/INSTALLATION.md) – instrucciones de instalación detalladas
-- [`DEVELOPMENT_GUIDE.md`](docs/DEVELOPMENT_GUIDE.md) – guía de desarrollo
+- [`BACKTESTER.md`](docs/BACKTESTER.md) – advanced backtesting engine
+- [`EXPERIMENTS.md`](docs/EXPERIMENTS.md) – running configurable experiments
+- [`VALIDATORS.md`](docs/VALIDATORS.md) – cross-validation helpers
+- [`INSTALLATION.md`](docs/INSTALLATION.md) – detailed installation instructions
+- [`DEVELOPMENT_GUIDE.md`](docs/DEVELOPMENT_GUIDE.md) – development guide
 
-## 🤝 Únete al Viaje
+## 🤝 Join the Journey
 
-Hyperion es un **proyecto vivo y en constante evolución**. Si te apasiona este mundo, tu ayuda es bienvenida. Puedes contribuir:
+Hyperion is a **living and constantly evolving project**. If you're passionate about this world, your help is welcome. You can contribute:
 
-- 🐛 **Reportando errores** via Issues
-- 💡 **Sugiriendo nuevas características** 
-- 🔧 **Añadiendo tu propio código** via Pull Requests
-- 📖 **Mejorando la documentación**
-- 🧪 **Compartiendo resultados de experimentos**
+- 🐛 **Reporting bugs** via Issues
+- 💡 **Suggesting new features** 
+- 🔧 **Adding your own code** via Pull Requests
+- 📖 **Improving documentation**
+- 🧪 **Sharing experiment results**
 
-La estructura del proyecto es modular, lo que facilita la adición de nuevos modelos, métricas o procesadores de datos.
+The project structure is modular, which facilitates adding new models, metrics, or data processors.
 
-### 🛠️ Cómo Contribuir
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+### 🛠️ How to Contribute
+1. Fork the repository
+2. Create a branch for your feature (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Asegúrate de que todas las pruebas pasen antes de enviar.
+Make sure all tests pass before submitting.
 
-## 📜 Licencia
+## 📜 License
 
-Este proyecto se publica bajo los términos de la Licencia Apache 2.0. Ver [`LICENSE`](LICENSE) para más detalles.
+This project is published under the terms of the Apache 2.0 License. See [`LICENSE`](LICENSE) for more details.
 
 ---
 
-## 🌟 Agradecimientos
+## 🌟 Acknowledgments
 
-Gracias a la comunidad open source y a todos los investigadores cuyo trabajo ha hecho posible Hyperion.
+Thanks to the open source community and all the researchers whose work has made Hyperion possible.
 
-
-**✨ ¿Listo para transformar tus ideas en estrategias reales? ¡Comienza tu viaje con Hyperion hoy!**
+**✨ Ready to transform your ideas into real strategies? Start your journey with Hyperion today!**
 
 ```bash
-git clone https://github.com/tu-usuario/hyperion.git
+git clone https://github.com/your-username/hyperion.git
 cd hyperion
 pip install -r requirements.txt
 python main.py
 ```
 
-*Gracias por leer hasta el final este es mi primer proyecto espero que este y los siguientes en los que trabajo puedan ser utiles.
+*Thanks for reading to the end. This is my first project and I hope this and the following ones I work on can be useful.*
 
+---
+
+**📖 Documentation available in multiple languages:**
+- 🇺🇸 [English](README.md) (current)
+- 🇪🇸 [Español](README_es.md)

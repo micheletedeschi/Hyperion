@@ -9,19 +9,43 @@ import torch
 
 from ..base import BaseModel
 from ..model_types import ModelType
-from ..transformers.patchtst import PatchTST
-from ..rl_agents.sac import SACTradingAgent, TradingEnvironmentSAC
+# Conditional imports to handle missing dependencies
+try:
+    from ..transformers.patchtst import PatchTST
+    PATCHTST_AVAILABLE = True
+except ImportError:
+    PatchTST = None
+    PATCHTST_AVAILABLE = False
 
-from ...data import DataPreprocessor
+try:
+    from ..rl_agents.sac import SACTradingAgent, TradingEnvironmentSAC
+    SAC_AVAILABLE = True
+except ImportError:
+    SACTradingAgent = None
+    TradingEnvironmentSAC = None
+    SAC_AVAILABLE = False
 
-from ..rl_agents.td3 import TD3TradingAgent
+try:
+    from ..rl_agents.td3 import TD3TradingAgent
+    TD3_AVAILABLE = True
+except ImportError:
+    TD3TradingAgent = None
+    TD3_AVAILABLE = False
 
-# Asumiendo que existe un entorno para TD3, si no, se debe crear o adaptar.
-# from ..rl_agents.td3 import TradingEnvironmentTD3
-from ..rl_agents.rainbow_dqn import RainbowTradingAgent
+try:
+    from ..rl_agents.rainbow_dqn import RainbowTradingAgent
+    RAINBOW_AVAILABLE = True
+except ImportError:
+    RainbowTradingAgent = None
+    RAINBOW_AVAILABLE = False
 
-# Asumiendo que existe un entorno para Rainbow, si no, se debe crear o adaptar.
-# from ..rl_agents.rainbow_dqn import TradingEnvironmentRainbow
+try:
+    from ...data import DataPreprocessor
+    DATA_PREPROCESSOR_AVAILABLE = True
+except ImportError:
+    # Fallback to None or a simple implementation
+    DataPreprocessor = None
+    DATA_PREPROCESSOR_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +90,12 @@ class EnsembleAgent(BaseModel):
             if isinstance(config, dict)
             else getattr(config, "data", {})
         )
-        self.preprocessor = DataPreprocessor(dp_conf)
+        # Handle DataPreprocessor availability
+        if DATA_PREPROCESSOR_AVAILABLE and DataPreprocessor is not None:
+            self.preprocessor = DataPreprocessor(dp_conf)
+        else:
+            logger.warning("DataPreprocessor no disponible, usando None")
+            self.preprocessor = None
         if isinstance(dp_conf, dict):
             self.lookback_window = dp_conf.get("lookback_window", 30)
         else:
@@ -309,13 +338,21 @@ class EnsembleAgent(BaseModel):
     def _initialize_models(self):
         """Inicializa los modelos del ensemble según la configuración."""
         try:
-            model_map = {
-                "patchtst": (PatchTST, {}),
-                "tft": (PatchTST, {}),  # TODO: replace with real TFT model
-                "sac": (SACTradingAgent, {}),
-                "td3": (TD3TradingAgent, {}),
-                "rainbow_dqn": (RainbowTradingAgent, {}),
-            }
+            model_map = {}
+            
+            # Add models only if they are available
+            if PATCHTST_AVAILABLE and PatchTST is not None:
+                model_map["patchtst"] = (PatchTST, {})
+                model_map["tft"] = (PatchTST, {})  # TODO: replace with real TFT model
+            
+            if SAC_AVAILABLE and SACTradingAgent is not None:
+                model_map["sac"] = (SACTradingAgent, {})
+            
+            if TD3_AVAILABLE and TD3TradingAgent is not None:
+                model_map["td3"] = (TD3TradingAgent, {})
+            
+            if RAINBOW_AVAILABLE and RainbowTradingAgent is not None:
+                model_map["rainbow_dqn"] = (RainbowTradingAgent, {})
 
             for name, (model_class, _) in model_map.items():
                 if name in self.model_configs:
@@ -384,15 +421,26 @@ class EnsembleAgent(BaseModel):
                 # Seleccionar columnas de características específicas
                 feature_cols = self.feature_columns.get(model_name, [])
                 if not all(col in model_train_data.columns for col in feature_cols):
-                    logger.info(
-                        f"Aplicando preprocesamiento para {model_name} por columnas faltantes"
-                    )
-                    processed = self.preprocessor.fit_transform(model_train_data)
-                    model_train_data = processed[feature_cols]
-                    if model_val_data is not None:
-                        model_val_data = self.preprocessor.transform(model_val_data)[
-                            feature_cols
-                        ]
+                    if self.preprocessor is not None:
+                        logger.info(
+                            f"Aplicando preprocesamiento para {model_name} por columnas faltantes"
+                        )
+                        processed = self.preprocessor.fit_transform(model_train_data)
+                        model_train_data = processed[feature_cols]
+                        if model_val_data is not None:
+                            model_val_data = self.preprocessor.transform(model_val_data)[
+                                feature_cols
+                            ]
+                    else:
+                        logger.warning(f"No preprocessor available for {model_name}, using raw data")
+                        # Try to use available columns only
+                        available_cols = [col for col in feature_cols if col in model_train_data.columns]
+                        if available_cols:
+                            model_train_data = model_train_data[available_cols].copy()
+                            if model_val_data is not None:
+                                model_val_data = model_val_data[available_cols].copy()
+                        else:
+                            raise ValueError(f"No suitable columns found for {model_name}")
                 else:
                     model_train_data = model_train_data[feature_cols].copy()
                     if model_val_data is not None:
@@ -459,12 +507,21 @@ class EnsembleAgent(BaseModel):
     def _train_patchtst(
         self,
         model_name: str,
-        model: PatchTST,
+        model: Any,  # Changed from PatchTST to Any for flexibility
         train_data: pd.DataFrame,
         val_data: Optional[pd.DataFrame],
         kwargs: Dict[str, Any],
     ) -> Dict[str, Any]:
         """Entrena modelo PatchTST de forma síncrona."""
+        if not PATCHTST_AVAILABLE:
+            logger.warning("PatchTST no está disponible. Retornando resultado vacío.")
+            return {
+                "model_name": model_name,
+                "status": "skipped",
+                "reason": "PatchTST not available",
+                "metrics": {}
+            }
+            
         try:
             logger.info(f"Entrenando PatchTST con {train_data.shape[0]} registros.")
             feature_cols = self.feature_columns[model_name]
@@ -540,11 +597,21 @@ class EnsembleAgent(BaseModel):
             try:
                 feature_cols = self.feature_columns.get(model_name, [])
                 if not all(col in data.columns for col in feature_cols):
-                    logger.info(
-                        f"Aplicando preprocesamiento para predicción de {model_name}"
-                    )
-                    processed = self.preprocessor.transform(data)
-                    model_data = processed[feature_cols]
+                    if self.preprocessor is not None:
+                        logger.info(
+                            f"Aplicando preprocesamiento para predicción de {model_name}"
+                        )
+                        processed = self.preprocessor.transform(data)
+                        model_data = processed[feature_cols]
+                    else:
+                        logger.warning(f"No preprocessor available for prediction of {model_name}")
+                        # Try to use available columns only
+                        available_cols = [col for col in feature_cols if col in data.columns]
+                        if available_cols:
+                            model_data = data[available_cols].copy()
+                        else:
+                            logger.warning(f"No suitable columns found for {model_name} prediction")
+                            continue
                 else:
                     model_data = data[feature_cols].copy()
                 pred = model.predict(model_data, **kwargs)
